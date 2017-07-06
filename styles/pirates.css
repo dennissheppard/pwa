@@ -1,0 +1,16 @@
+img {
+    max-height: 400px;
+}
+
+@font-face {
+  font-family: 'pirate';
+  src: url('pirate.ttf');
+}
+
+p {
+    font-family: "pirate", helvetica;
+    font-size: 40px;
+    font-weight: normal;
+    letter-spacing: -2px;
+}
+
