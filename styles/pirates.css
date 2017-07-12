@@ -1,5 +1,6 @@
-img {
-    max-height: 400px;
+
+body {
+    background: url('/images/parchment-background.jpg') repeat;
 }
 
 @font-face {
@@ -7,10 +8,28 @@ img {
   src: url('pirate.ttf');
 }
 
-p {
+h1, h2, h3, p, ul, li, a {
     font-family: "pirate", helvetica;
     font-size: 40px;
     font-weight: normal;
     letter-spacing: -2px;
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: stretch;
+    align-items: center;
+}
+
+.item {
+    order: 0;
+    flex: 0 1 auto;
+    align-self: auto;
+}
+
+img {
+    max-height: 450px;
+}
