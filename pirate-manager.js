@@ -1,10 +1,12 @@
 var pirateManager = (() => {
   var commentList = [];
+  var messageText = '';
   return {
     getComments: getComments,
     postComment: postComment,
     commentList: commentList,
-    getCommentData: getCommentData
+    getCommentData: getCommentData,
+    setMessageText: setMessageText
   };
 
   function getComments() {
@@ -34,9 +36,13 @@ var pirateManager = (() => {
     function getCommentData() {
       let d = new Date();
       return {
-        commentText: 'Arrrgh!',
+        commentText: messageText,
         date: (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
       };
+    }
+
+    function setMessageText(message) {
+      messageText = message;
     }
 
 })();

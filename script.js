@@ -39,7 +39,18 @@
   }
 
   function addListeners() {
-    document.getElementById('commentBtn').addEventListener('click', () => postComment());
+    document.getElementById('arrghBtn').addEventListener('click', () => sayArrrgh());
+    document.getElementById('ahoyBtn').addEventListener('click', () => sayAhoy());
+  }
+
+  function sayArrrgh() {
+    pirateManager.setMessageText('Arrrgh!');
+    postComment();
+  }
+
+  function sayAhoy() {
+    pirateManager.setMessageText('Ahoy!');
+    postComment();
   }
 
   function resetElements() {
