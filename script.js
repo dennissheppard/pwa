@@ -27,7 +27,7 @@
   }
 
   function postComment() {
-    navigator.serviceWorker.ready.then(function(sw) {
+    navigator.serviceWorker.ready.then((sw) => {
       return sw.sync.register('post-message')
         .then((args) => {
           appendComment(document.getElementById('comments'), pirateManager.getCommentData());

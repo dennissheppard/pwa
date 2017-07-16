@@ -4,7 +4,6 @@ var pirateManager = (() => {
   return {
     getComments: getComments,
     postComment: postComment,
-    commentList: commentList,
     getCommentData: getCommentData,
     setMessageText: setMessageText
   };
