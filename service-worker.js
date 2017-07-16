@@ -1,7 +1,13 @@
-importScripts('sw-toolbox.js');
+importScripts('sw-toolbox.js', 'pirate-manager.js');
 
 self.addEventListener('install', (event) => {
 
+});
+
+self.addEventListener('sync', (event) => {
+  if (event.tag == 'post-message') {
+    event.waitUntil(pirateManager.postComment());
+  }
 });
 
 toolbox.router.get('/images/*', toolbox.fastest, {
