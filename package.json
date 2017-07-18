@@ -1,0 +1,12 @@
+{
+  "name": "PWA Pirates",
+  "version": "1.0",
+  "dependencies": {
+    "localforage": "^1.5.0",
+    "sw-precache": "^5.2.0",
+    "sw-toolbox": "^3.6.0"
+  },
+  "devDependencies": {
+    "httpserver": "^0.3.0"
+  }
+}
