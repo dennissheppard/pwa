@@ -3,9 +3,7 @@ var pirateManager = (() => {
   var messageText = '';
   return {
     getComments: getComments,
-    postComment: postComment,
-    getCommentData: getCommentData,
-    setMessageText: setMessageText
+    postComment: postComment
   };
 
   function getComments() {
@@ -18,30 +16,20 @@ var pirateManager = (() => {
   }
 
   function postComment() {
-      let payload = getCommentData();
+      return localforage.getItem('comment').then((val) => {
+        let d = new Date();
+        let data = {
+          commentText: val,
+          date: (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
+        };
 
-      let data = JSON.stringify(payload);
 
-      return fetch("https://pirates-b74f7.firebaseio.com/commentList.json",
-      {
-          method: "POST",
-          body: data
-      })
-      .then((response) => {
-        response.json();
+        return fetch("https://pirates-b74f7.firebaseio.com/commentList.json",
+        {
+            method: "POST",
+            body: JSON.stringify(data)
+        }).then(() => data);
       });
-    }
 
-    function getCommentData() {
-      let d = new Date();
-      return {
-        commentText: messageText,
-        date: (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
-      };
     }
-
-    function setMessageText(message) {
-      messageText = message;
-    }
-
 })();

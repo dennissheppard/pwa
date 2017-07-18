@@ -25,12 +25,25 @@
     return pirateManager.getComments()
     .then((commentList) => commentList);
   }
+  var timeout;
 
   function postComment() {
+    document.getElementById('commentBtn').innerHTML = "Posting...";
+    localforage.setItem('comment', document.getElementById('comment-text').value);
     navigator.serviceWorker.ready.then((sw) => {
-      return sw.sync.register('post-message')
+      return sw.sync.register('post-comment')
         .then((args) => {
-          appendComment(document.getElementById('comments'), pirateManager.getCommentData());
+          timeout = setTimeout(() => {
+            localforage.getItem('comment').then((val) => {
+              if(val) {
+                document.getElementById('no-connection-message').style.display = "block";
+                document.getElementById('commentBtn').innerHTML = "Leave a comment";
+                document.getElementById('comment-text').value = "";
+              } else {
+                clearTimeout(timeout);
+              }
+            });
+          }, 3000);
         })
         .catch((err) => {
           console.log(err);
@@ -39,18 +52,15 @@
   }
 
   function addListeners() {
-    document.getElementById('arrghBtn').addEventListener('click', () => sayArrrgh());
-    document.getElementById('ahoyBtn').addEventListener('click', () => sayAhoy());
-  }
-
-  function sayArrrgh() {
-    pirateManager.setMessageText('Arrrgh!');
-    postComment();
-  }
-
-  function sayAhoy() {
-    pirateManager.setMessageText('Ahoy!');
-    postComment();
+    document.getElementById('commentBtn').addEventListener('click', () => postComment());
+    navigator.serviceWorker.addEventListener('message', function(event){
+      clearTimeout(timeout);
+      document.getElementById('comment-text').value = "";
+      document.getElementById('commentBtn').innerHTML = "Leave a comment";
+      document.getElementById('no-connection-message').style.display = "none";
+      appendComment(document.getElementById('comments'), event.data);
+      localforage.removeItem('comment');
+    });
   }
 
   function resetElements() {
@@ -64,7 +74,6 @@
     Object.keys(commentList).forEach((key) => {
       let comment = commentList[key];
       appendComment(comments, comment);
-
     });
   }
 
@@ -75,7 +84,5 @@
     let hrElement = document.createElement('hr');
     commentsEl.appendChild(hrElement);
   }
-
-
 
 })();

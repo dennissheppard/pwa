@@ -1,12 +1,14 @@
-importScripts('sw-toolbox.js', 'pirate-manager.js');
+importScripts('sw-toolbox.js', 'pirate-manager.js', 'node_modules/localforage/dist/localforage.min.js');
 
 self.addEventListener('install', (event) => {
 
 });
 
 self.addEventListener('sync', (event) => {
-  if (event.tag == 'post-message') {
-    event.waitUntil(pirateManager.postComment());
+  if (event.tag == 'post-comment') {
+    event.waitUntil(pirateManager.postComment().then((data) => {
+      notifyClient(data);
+    }));
   }
 });
 
@@ -42,3 +44,31 @@ toolbox.router.get('/*', toolbox.networkFirst, {
     maxAgeSeconds: 60 * 60 * 12
   }
 });
+
+toolbox.router.get('/*', toolbox.networkFirst, {
+  origin: 'firebaseio.com',
+  cache: {
+    name: 'sw-toolbox-version1',
+    maxEntries: 20,
+    maxAgeSeconds: 60 * 60 * 24 * 14
+  }
+});
+
+function notifyClient(msg){
+    return new Promise(function(resolve, reject){
+        var msg_chan = new MessageChannel();
+
+        msg_chan.port1.onmessage = function(event){
+            if(event.data.error){
+                reject(event.data.error);
+            }else{
+                resolve(event.data);
+            }
+        };
+        self.clients.matchAll({"includeUncontrolled" : true}).then((clients) => {
+          clients[0].postMessage(msg);
+        });
+
+
+    });
+}

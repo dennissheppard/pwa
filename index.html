@@ -1,28 +1,31 @@
 <html>
-  <head>
+<head>
+    <script src="node_modules/localforage/dist/localforage.min.js"></script>
     <script src="pirate-manager.js"></script>
     <script src="script.js"></script>
-    <link rel="stylesheet" type="text/css" href="styles/pirates.css" />
+    <link rel="stylesheet" type="text/css" href="styles/pirates.css"/>
     <script src="companion.js" data-service-worker="service-worker.js"></script>
-  </head>
+</head>
 
-  <body>
-    <div class="container">
-      <h1 class="item">Ahoy PWA Pirates!</h1>
-      <a class="item" href="pirates.html">arrrrghh!</a>
-      <a class="item" href="pirate_books.html">Look at these books, matey!</a>
-      <hr />
-      <h1>Comments</h1>
-      <div id="comments">
-
-      </div>
-      <div style="display: flex; flex-direction: row">
-        <button id="arrghBtn">Say Arrrgh!</button>
-        <button id="ahoyBtn">Say Ahoy!</button>
-      </div>
+<body>
+<div class="container">
+    <h1 class="item">Ahoy PWA Pirates!</h1>
+    <a class="item" href="pirates.html">arrrrghh!</a>
+    <a class="item" href="pirate_books.html">Look at these books, matey!</a>
+    <hr/>
+    <h1>Comments</h1>
+    <div id="comments">
 
     </div>
+    <div id="no-connection-message" style="display: none;">
+        <h2>Arrrgh! Looks like you have no connection. We'll try posting your message again when you're back online!</h2>
+    </div>
+    <textarea id="comment-text" cols="40" rows="10"></textarea>
+    <div style="display: flex; flex-direction: row">
+        <button id="commentBtn">Leave a comment</button>
+    </div>
+</div>
 
-  </body>
+</body>
 
 </html>
