@@ -55,10 +55,10 @@ toolbox.router.get('/*', toolbox.networkFirst, {
 });
 
 function notifyClient(msg){
-    return new Promise(function(resolve, reject){
-        var msg_chan = new MessageChannel();
+    return new Promise((resolve, reject) => {
+        let msgChannel = new MessageChannel();
 
-        msg_chan.port1.onmessage = function(event){
+        msgChannel.port1.onmessage = (event) => {
             if(event.data.error){
                 reject(event.data.error);
             }else{
@@ -68,7 +68,5 @@ function notifyClient(msg){
         self.clients.matchAll({"includeUncontrolled" : true}).then((clients) => {
           clients[0].postMessage(msg);
         });
-
-
     });
 }
