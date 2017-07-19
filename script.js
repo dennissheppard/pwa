@@ -59,7 +59,6 @@
       document.getElementById('commentBtn').innerHTML = "Leave a comment";
       document.getElementById('no-connection-message').style.display = "none";
       appendComment(document.getElementById('comments'), event.data);
-      localforage.removeItem('comment');
     });
   }
 
