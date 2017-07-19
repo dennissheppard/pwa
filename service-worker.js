@@ -55,18 +55,7 @@ toolbox.router.get('/*', toolbox.networkFirst, {
 });
 
 function notifyClient(msg){
-    return new Promise((resolve, reject) => {
-        let msgChannel = new MessageChannel();
-
-        msgChannel.port1.onmessage = (event) => {
-            if(event.data.error){
-                reject(event.data.error);
-            }else{
-                resolve(event.data);
-            }
-        };
-        self.clients.matchAll({"includeUncontrolled" : true}).then((clients) => {
-          clients[0].postMessage(msg);
-        });
-    });
+  self.clients.matchAll({"includeUncontrolled" : true}).then((clients) => {
+    clients[0].postMessage(msg);
+  });
 }
