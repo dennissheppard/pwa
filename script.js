@@ -53,7 +53,7 @@
 
   function addListeners() {
     document.getElementById('commentBtn').addEventListener('click', () => postComment());
-    navigator.serviceWorker.addEventListener('message', function(event){
+    navigator.serviceWorker.addEventListener('message', (event) => {
       clearTimeout(timeout);
       document.getElementById('comment-text').value = "";
       document.getElementById('commentBtn').innerHTML = "Leave a comment";
