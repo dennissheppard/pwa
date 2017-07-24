@@ -4,9 +4,10 @@
     <script src="pirate-manager.js"></script>
     <script src="script.js"></script>
     <link rel="stylesheet" type="text/css" href="styles/pirates.css"/>
+    <link rel="manifest" href="manifest.json">
     <script src="companion.js" data-service-worker="service-worker.js"></script>
 </head>
-
+<title>iPatch</title>
 <body>
 <div class="container">
     <h1 class="item">Ahoy PWA Pirates!</h1>
@@ -21,9 +22,7 @@
         <h2>Arrrgh! Looks like you have no connection. We'll try posting your message again when you're back online!</h2>
     </div>
     <textarea id="comment-text" cols="40" rows="10"></textarea>
-    <div style="display: flex; flex-direction: row">
-        <button id="commentBtn">Leave a comment</button>
-    </div>
+    <button type="button" id="commentBtn">Leave a comment</button>
 </div>
 
 </body>

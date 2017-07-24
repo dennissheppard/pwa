@@ -60,6 +60,35 @@
       document.getElementById('no-connection-message').style.display = "none";
       appendComment(document.getElementById('comments'), event.data);
     });
+    var deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (event) => {
+      event.userChoice.then((result) => {
+        console.log(result.outcome);
+        if(result.outcome === 'dismissed') {
+          console.log('The app was not added to the home screen');
+        } else {
+          console.log('The app was added to home screen');
+        }
+      });
+      event.preventDefault();
+      deferredPrompt = event;
+    });
+
+    // if we wanted to defer the prompt
+    // document.getElementById('install-to-home-screen').addEventListener('click', () => {
+    //   if(deferredPrompt) {
+    //     deferredPrompt.prompt();
+    //     deferredPrompt.userChoice.then((result) => {
+    //       console.log(result.outcome);
+    //       if(result.outcome === 'dismissed') {
+    //         console.log('The app was not added to the home screen');
+    //       } else {
+    //         console.log('The app was added to home screen');
+    //       }
+    //     });
+    //     delete deferredPrompt;
+    //   }
+    // });
   }
 
   function resetElements() {
