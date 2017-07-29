@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Peggy is hungry!</title>
+    <link rel="stylesheet" type="text/css" href="../styles/pirates.css" />
+    <script>
+      (() => {
+
+        document.addEventListener('DOMContentLoaded', initPage, false);
+        function initPage() {
+          feedParrot();
+          makeParrotHungry();
+          let notificationsBtn = document.getElementById('enable-notifications');
+          let notificationsText = document.getElementById('notification-text');
+          if (!('Notification' in window)) {
+            notificationsBtn.style.display = 'none';
+            notificationsText.innerHTML = 'This browser does not support notifications!';
+          } else if (Notification.permission === 'denied') {
+            notificationsBtn.disabled = true;
+            notificationsText.innerHTML = 'Arrgh, you turned off notifications!';
+          } else if (Notification.permission === 'granted') {
+            notificationsBtn.style.display = 'none';
+            notificationsBtn.innerText = 'Notifications enabled';
+            notificationsText.innerText = 'You will get notifications to feed Peggy!';
+          }
+
+          notificationsBtn.addEventListener('click', () => {
+            enableNotifications();
+            notificationsBtn.disabled = true;
+            notificationsText.innerText = 'You will get notifications to feed Peggy!';
+          });
+
+          document.getElementById('feed-parrot').addEventListener('click', feedParrot);
+        }
+
+        function enableNotifications() {
+          Notification.requestPermission().then((result) => {
+
+          });
+        }
+
+        function makeParrotHungry() {
+          let parrotPic = document.getElementById('parrot');
+          let interval = setInterval(() => {
+            parrotPic.style.opacity -= .1;
+            if (parrotPic.style.opacity <= 0) {
+              clearInterval(interval);
+              hideParrot();
+            } else if (parrotPic.style.opacity < .5) {
+              sendNotification(+parrotPic.style.opacity);
+            }
+          }, 1000 * 3);
+        }
+
+        function feedParrot() {
+          let parrotPic = document.getElementById('parrot');
+          parrotPic.style.opacity = 1.0;
+        }
+
+        function hideParrot() {
+          document.getElementById('peggy-intro').innerHTML = 'Arrgh, Peggy sleeps with the fishes...';
+          document.getElementById('feed-reminder-text').innerHTML = 'Now it\'s your turn!';
+          document.getElementById('enable-notifications').style.display = 'none';
+          document.getElementById('feed-parrot').style.display = 'none';
+          document.getElementById('parrot').style.display = 'none';
+          document.getElementById('notification-text').style.display = 'none';
+          document.getElementById('parrot-plank').style.display = 'block';
+        }
+
+        function sendNotification(secondsLeft) {
+          let options = {
+            body: 'Peggy wants a pretzel! You have ' + (secondsLeft * 10 * 3) + ' seconds to feed her!',
+            icon: 'images/peggy_parrot.jpg',
+            tag: 'feed-peggy'
+          };
+
+          let notification = new Notification('Peggy says', options);
+        }
+
+      })();
+
+    </script>
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <h1 id="peggy-intro">This here's Peggy the Parrot</h1>
+
+    <img src="images/peggy_parrot.jpg" id="parrot">
+    <img src="images/parrot_plank.jpg" id="parrot-plank" style="display: none;">
+    <button id="feed-parrot">Feed Peggy</button>
+
+
+    <h2 id="feed-reminder-text">Remember to feed her, or we reckon she might disappear! Arrrgh!</h2>
+    <div>
+        <h3 id="notification-text">If ye need a reminder, we can notify you. Sign up here:</h3>
+        <button id="enable-notifications">Enable Notifications</button>
+    </div>
+</body>
+</html>
