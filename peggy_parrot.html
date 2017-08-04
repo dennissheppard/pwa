@@ -2,12 +2,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Peggy is hungry!</title>
+    <script src="pirate-manager.js"></script>
     <link rel="stylesheet" type="text/css" href="../styles/pirates.css" />
     <script>
       (() => {
 
-        document.addEventListener('DOMContentLoaded', initPage, false);
+        window.addEventListener('load', initPage, false);
         function initPage() {
+          pirateManager.registerServiceWorker();
           feedParrot();
           makeParrotHungry();
           let notificationsBtn = document.getElementById('enable-notifications');
@@ -22,6 +24,7 @@
             notificationsBtn.style.display = 'none';
             notificationsBtn.innerText = 'Notifications enabled';
             notificationsText.innerText = 'You will get notifications to feed Peggy!';
+            pirateManager.subscribeToPush();
           }
 
           notificationsBtn.addEventListener('click', () => {
@@ -35,7 +38,7 @@
 
         function enableNotifications() {
           Notification.requestPermission().then((result) => {
-
+            pirateManager.subscribeToPush();
           });
         }
 
@@ -46,8 +49,6 @@
             if (parrotPic.style.opacity <= 0) {
               clearInterval(interval);
               hideParrot();
-            } else if (parrotPic.style.opacity < .5) {
-              sendNotification(+parrotPic.style.opacity);
             }
           }, 1000 * 3);
         }
@@ -55,6 +56,11 @@
         function feedParrot() {
           let parrotPic = document.getElementById('parrot');
           parrotPic.style.opacity = 1.0;
+          fetch('http://192.168.1.150:8081/feed', {
+            method: 'post'
+          }).then(() => {
+            console.log('fed and posted');
+          });
         }
 
         function hideParrot() {
@@ -65,16 +71,6 @@
           document.getElementById('parrot').style.display = 'none';
           document.getElementById('notification-text').style.display = 'none';
           document.getElementById('parrot-plank').style.display = 'block';
-        }
-
-        function sendNotification(secondsLeft) {
-          let options = {
-            body: 'Peggy wants a pretzel! You have ' + (secondsLeft * 10 * 3) + ' seconds to feed her!',
-            icon: 'images/peggy_parrot.jpg',
-            tag: 'feed-peggy'
-          };
-
-          let notification = new Notification('Peggy says', options);
         }
 
       })();
