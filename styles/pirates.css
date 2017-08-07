@@ -8,28 +8,38 @@ body {
   src: url('pirate.ttf');
 }
 
-h1, h2, h3, p, ul, li, a {
-    font-family: "pirate", helvetica;
-    font-size: 40px;
+h1, h2, h3, p, ul, li, a, span {
+    font-family: "pirate", helvetica !important;
     font-weight: normal;
-    letter-spacing: -2px;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-content: stretch;
-    align-items: center;
-}
-
-.item {
-    order: 0;
-    flex: 0 1 auto;
-    align-self: auto;
+    letter-spacing: 1px !important;
 }
 
 img {
     max-height: 450px;
+}
+
+nav a {
+    font-size: 28px !important;
+}
+
+
+@media screen
+  and (max-width: 1000px) {
+
+    .mdl-card {
+        width: 100%;
+    }
+}
+
+a.mdl-navigation__link {
+    padding: 16px 25px !important;
+}
+
+#comments {
+    height: calc(100% - 78px);
+    overflow: scroll;
+}
+
+main {
+    height: 100%;
 }

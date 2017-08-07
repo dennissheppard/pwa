@@ -1,6 +1,23 @@
 (() => {
   document.addEventListener('DOMContentLoaded', init, false);
 
+  var newCommentTemplate =
+    `<div id="new-comment" class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
+        <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
+          <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+            <button id="new-comment-post" class="mdl-button" style="background-color: #263238; color: white;">
+                Post Comment
+            </button>
+
+
+          </div>
+          <div class="mdl-card__actions mdl-card--border">
+            <textarea id="comment-text" style="border: none; width: 100%; height: 100px;"></textarea>
+          </div>
+        </div>
+        <div class="demo-separator mdl-cell--1-col"></div>
+      </div>`;
+
   function init() {
     pirateManager.registerServiceWorker();
     addListeners();
@@ -13,9 +30,19 @@
   }
   var timeout;
 
+  function showCommentBox() {
+    document.getElementById('comments').insertAdjacentHTML('afterbegin', newCommentTemplate);
+    document.getElementById('comment-text').focus();
+    document.getElementById('new-comment-post').addEventListener('click', () => postComment());
+  }
+
   function postComment() {
-    document.getElementById('commentBtn').innerHTML = "Posting...";
-    localforage.setItem('comment', document.getElementById('comment-text').value);
+    document.getElementById('commentBtn').innerHTML = "<h3>Posting...</h3>";
+    localforage.setItem('comment', document.getElementById('comment-text').value).then(() => registerSync());
+
+  }
+
+  function registerSync() {
     navigator.serviceWorker.ready.then((sw) => {
       return sw.sync.register('post-comment')
         .then((args) => {
@@ -23,8 +50,9 @@
             localforage.getItem('comment').then((val) => {
               if(val) {
                 document.getElementById('no-connection-message').style.display = "block";
-                document.getElementById('commentBtn').innerHTML = "Leave a comment";
+                document.getElementById('commentBtn').innerHTML = "<h3>Leave a comment</h3>";
                 document.getElementById('comment-text').value = "";
+                document.getElementById('new-comment').style.display = "none";
               } else {
                 clearTimeout(timeout);
               }
@@ -38,12 +66,13 @@
   }
 
   function addListeners() {
-    document.getElementById('commentBtn').addEventListener('click', () => postComment());
+    document.getElementById('commentBtn').addEventListener('click', () => showCommentBox());
     navigator.serviceWorker.addEventListener('message', (event) => {
       clearTimeout(timeout);
       document.getElementById('comment-text').value = "";
-      document.getElementById('commentBtn').innerHTML = "Leave a comment";
+      document.getElementById('commentBtn').innerHTML = "<h3>Leave a comment</h3>";
       document.getElementById('no-connection-message').style.display = "none";
+      document.getElementById('new-comment').style.display = "none";
       appendComment(document.getElementById('comments'), event.data);
     });
     var deferredPrompt;
@@ -83,7 +112,7 @@
   }
 
   function renderComments(commentList) {
-    resetElements();
+    // resetElements();
     let comments = document.getElementById('comments');
     Object.keys(commentList).forEach((key) => {
       let comment = commentList[key];
@@ -91,12 +120,28 @@
     });
   }
 
-  function appendComment(commentsEl, comment) {
-    let commentElement = document.createElement('p');
-    commentElement.innerHTML = comment.commentText + " - " + comment.date;
-    commentsEl.appendChild(commentElement);
-    let hrElement = document.createElement('hr');
-    commentsEl.appendChild(hrElement);
+  function appendComment(commentsElement, comment) {
+    let commentsEl = commentsElement || document.getElementById('comments');
+    const commentHTML =
+`
+<div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
+  <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
+    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+      ${comment.date}
+
+
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+      <span>
+          ${comment.commentText}
+      </span>
+    </div>
+  </div>
+  <div class="demo-separator mdl-cell--1-col"></div>
+</div>
+`;
+
+    commentsEl.insertAdjacentHTML('afterbegin', commentHTML);
   }
 
 })();
