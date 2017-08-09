@@ -132,7 +132,7 @@
 
     </div>
     <div class="mdl-card__actions mdl-card--border">
-      <span>
+      <span class="comment-text">
           ${comment.commentText}
       </span>
     </div>

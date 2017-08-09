@@ -1,15 +1,8 @@
 <html>
 <head>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-indigo.min.css" />
-    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-    <script src="node_modules/localforage/dist/localforage.min.js"></script>
-    <script src="pirate-manager.js"></script>
-    <script src="script.js"></script>
-    <link rel="stylesheet" type="text/css" href="styles/pirates.css"/>
     <link rel="manifest" href="manifest.json">
-    <script src="companion.js" data-service-worker="service-worker.js"></script>
+
 </head>
 <title>iPatch</title>
 <body>
@@ -62,13 +55,19 @@
 
     </div>
     <div id="commentBtn" class="btn-wrapper" style="z-index: 3;text-align: center;position:fixed;bottom:0px;width:100%;height: 75px;cursor: pointer; background-color: #263238; color: white;">
-        <h3>Leave a comment</h3>
+        <h3 class="comment-button-text" style="margin-left: -245px;">Leave a comment</h3>
     </div>
 
   </main>
 </div>
-
-<script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-indigo.min.css" media="none" onload="if(media!='all')media='all'"/>
+<link rel="stylesheet" type="text/css" href="styles/pirates.css" media="none" onload="if(media!='all')media='all'"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" media="none" onload="if(media!='all')media='all'" />
+<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+<script defer src="localforage.min.js"></script>
+<script defer src="pirate-manager.js"></script>
+<script defer src="script.js"></script>
+<script defer src="companion.js" data-service-worker="service-worker.js"></script>
 </body>
 
 </html>

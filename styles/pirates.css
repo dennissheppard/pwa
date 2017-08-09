@@ -1,8 +1,4 @@
 
-body {
-    background: url('/images/parchment-background.jpg') repeat;
-}
-
 @font-face {
   font-family: 'pirate';
   src: url('pirate.ttf');
@@ -42,4 +38,20 @@ a.mdl-navigation__link {
 
 main {
     height: 100%;
+}
+
+.book-title {
+    font-size: 20px;
+}
+
+.arrrgh p {
+    font-size: 20px;
+}
+
+.comment-button-text {
+    margin-left: -245px;
+}
+
+.comment-text {
+    font-size: 24px;
 }

@@ -1,4 +1,4 @@
-importScripts('sw-toolbox.js', 'pirate-manager.js', 'node_modules/localforage/dist/localforage.min.js');
+importScripts('sw-toolbox.js', 'pirate-manager.js', 'localforage.min.js');
 
 self.addEventListener('install', (event) => {
 
@@ -69,7 +69,7 @@ self.addEventListener('sync', (event) => {
  *******************/
 var CACHE_NAME = 'sw-toolbox-version1';
 (() => {
-  toolbox.router.get('/images/*', toolbox.fastest, {
+  toolbox.router.get('/images/*', toolbox.cacheFirst, {
     cache: {
       name: CACHE_NAME,
       maxEntries: 20,
@@ -101,17 +101,27 @@ var CACHE_NAME = 'sw-toolbox-version1';
     }
   });
 
-  toolbox.router.get('/*', toolbox.networkFirst, {
+  toolbox.router.get('/*', toolbox.cacheFirst, {
     origin: 'openlibrary.org',
     cache: {
       name: CACHE_NAME,
       maxEntries: 20,
       maxAgeSeconds: 60 * 60 * 12
-    }
+    },
+    networkTimeoutSeconds: 1
   });
 
   toolbox.router.get('/*', toolbox.networkFirst, {
     origin: 'firebaseio.com',
+    cache: {
+      name: CACHE_NAME,
+      maxEntries: 20,
+      maxAgeSeconds: 60 * 60 * 24 * 14
+    }
+  });
+
+  toolbox.router.get('/*', toolbox.networkFirst, {
+    origin: 'googleapis.com',
     cache: {
       name: CACHE_NAME,
       maxEntries: 20,
