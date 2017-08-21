@@ -1,0 +1,21 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "headers": [
+      {
+        "source": "/",
+        "headers": [
+          {
+            "key": "Link",
+            "value": "<scripts/script.js>;rel=preload;as=script,<scripts/pirate-manager.js>;rel=preload;as=script,<styles/pirates.css>;rel=preload;as=style"
+          }
+        ]
+      }
+    ]
+  }
+}
