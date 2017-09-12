@@ -2,23 +2,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Arrrrgghh!</title>
-    <link rel="stylesheet" type="text/css" href="../styles/pirates.css" />
+    <link rel="stylesheet" type="text/css" href="styles/pirates.css" />
     <script>
-      let pirateBooks = [];
-      let bookSearchUrl = 'http://openlibrary.org/search.json?q=pirate+history';
-      fetch(bookSearchUrl).then((response) => response.json()).then((data) => {
-        pirateBooks = data.docs;
-        generatePirateBookList();
-      });
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js').then((registration) => {
 
-      function generatePirateBookList() {
-        let pirateList = document.getElementById('pirateList');
-        for (let i = 0, book; book = pirateBooks[i]; ++i) {
-          let pirateItem = document.createElement('li')
-          pirateItem.innerHTML = book.title + (book.author_name ? " by " + book.author_name[0] : '');
-          pirateList.appendChild(pirateItem);
+            }, function (err) {
+                console.log(err);
+            });
+
+        } else {
+            alert('No service worker support in this browser');
         }
-      }
+        let pirateBooks = [];
+        let bookSearchUrl = 'http://openlibrary.org/search.json?q=pirate+history';
+        fetch(bookSearchUrl).then((response) => response.json()).then((data) => {
+            pirateBooks = data.docs;
+            generatePirateBookList();
+        });
+
+        function generatePirateBookList() {
+            let pirateList = document.getElementById('pirateList');
+            for (let i = 0, book; book = pirateBooks[i]; ++i) {
+                let pirateItem = document.createElement('li')
+                pirateItem.innerHTML = book.title + (book.author_name ? " by " + book.author_name[0] : '');
+                pirateList.appendChild(pirateItem);
+            }
+        }
     </script>
     <link rel="manifest" href="manifest.json">
 </head>
