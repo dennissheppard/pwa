@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pirate Books!</title>
+    <link rel="stylesheet" href="libs/styles/material-icons.css">
+    <link rel="stylesheet" href="libs/styles/material.blue_grey-indigo.min.css" />
+    <link rel="stylesheet" type="text/css" href="styles/pirates.css" />
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+      <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">Pirate Books</span>
+          <div class="mdl-layout-spacer"></div>
+          <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
+            <i class="material-icons">more_vert</i>
+          </button>
+          <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
+            <li class="mdl-menu__item">About</li>
+            <li class="mdl-menu__item">Contact</li>
+          </ul>
+        </div>
+      </header>
+      <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+        <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
+          <a class="mdl-navigation__link" href="index.html">
+            <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>
+            Home
+          </a>
+          <a class="mdl-navigation__link" href="pirates.html">
+            <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">dashboard</i>
+            Arrrrgh!
+          </a>
+          <a class="mdl-navigation__link" href="pirate_books.html">
+            <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">book</i>
+            Pirate Books
+          </a>
+          <a class="mdl-navigation__link" href="peggy_parrot.html">
+            <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">notifications</i>
+            Peggy Parrot
+          </a>
+
+        </nav>
+      </div>
+      <main class="mdl-layout__content mdl-color--grey-100">
+        <div id="book-list" class="mdl-grid demo-content">
+
+        </div>
+      </main>
+    </div>
+
+
+    <script defer src="libs/scripts/material.min.js"></script>
+
+    <script>
+      let pirateBooks = [];
+      let bookSearchUrl = 'https://openlibrary.org/search.json?q=pirate';
+      fetch(bookSearchUrl).then((response) => response.json()).then((data) => {
+        pirateBooks = data.docs;
+        generatePirateBookList();
+      });
+
+      function generatePirateBookList() {
+        let pirateList = document.getElementById('pirateList');
+        for (let i = 0, book; book = pirateBooks[i]; ++i) {
+          book.author_name = book.author_name ? book.author_name[0] : '';
+          appendBooks(book);
+        }
+      }
+
+      function appendBooks(book) {
+        let bookList = document.getElementById('book-list');
+        const bookCardHTML =
+`
+<div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
+  <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
+    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+      By ${book.author_name}
+
+
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+      <span class="book-title">
+          ${book.title}
+      </span>
+    </div>
+  </div>
+  <div class="demo-separator mdl-cell--1-col"></div>
+</div>
+`;
+
+        bookList.insertAdjacentHTML('beforeend', bookCardHTML);
+      }
+    </script>
+</body>
+</html>

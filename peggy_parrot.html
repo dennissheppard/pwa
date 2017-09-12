@@ -1,0 +1,158 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Peggy is hungry!</title>
+
+
+    <link rel="preload" as="style" href="libs/styles/material.blue_grey-indigo.min.css" >
+    <link rel="preload" as="style" href="libs/styles/material-icons.css" >
+    <link rel="preload" as="style" href="styles/pirates.css" >
+    <link rel="stylesheet" href="libs/styles/material.blue_grey-indigo.min.css" >
+    <link rel="stylesheet" href="libs/styles/material-icons.css" >
+    <link rel="stylesheet" href="styles/pirates.css" >
+
+
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+  <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+    <div class="mdl-layout__header-row">
+      <span class="mdl-layout-title">Peggy the Parrot</span>
+      <div class="mdl-layout-spacer"></div>
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
+        <i class="material-icons">more_vert</i>
+      </button>
+      <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
+        <li class="mdl-menu__item">About</li>
+        <li class="mdl-menu__item">Contact</li>
+      </ul>
+    </div>
+  </header>
+  <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+    <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
+      <a class="mdl-navigation__link" href="index.html">
+        <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>
+        Home
+      </a>
+      <a class="mdl-navigation__link" href="pirates.html">
+        <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">dashboard</i>
+        Arrrrgh!
+      </a>
+      <a class="mdl-navigation__link" href="pirate_books.html">
+        <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">book</i>
+        Pirate Books
+      </a>
+      <a class="mdl-navigation__link" href="peggy_parrot.html">
+        <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">notifications</i>
+        Peggy Parrot
+      </a>
+
+    </nav>
+  </div>
+  <main class="mdl-layout__content mdl-color--grey-100">
+    <h2 id="peggy-intro">This here's Peggy the Parrot</h2>
+
+    <img src="images/peggy_parrot.jpg" id="parrot">
+    <img src="images/parrot_plank.jpg" id="parrot-plank" style="display: none;">
+
+    <h3 id="feed-reminder-text">Remember to feed her, or we reckon she might disappear! Arrrgh!</h3>
+
+    <div id="enable-notifications" class="btn-wrapper" style="z-index: 3;text-align: center;position:fixed;bottom:76px;width:100%;height: 75px;cursor: pointer; background-color: #263238; color: white;border-bottom: 1px solid gray;">
+        <h3>Enable Notifications</h3>
+    </div>
+    <div id="feed-parrot" class="btn-wrapper" style="z-index: 3;text-align: center;position:fixed;bottom:0px;width:100%;height: 75px;cursor: pointer; background-color: #263238; color: white;">
+        <h3>Feed Peggy</h3>
+    </div>
+  </main>
+</div>
+
+<script defer src="libs/scripts/material.min.js"></script>
+<script src="scripts/pirate-manager.js"></script>
+<script>
+      (() => {
+
+        window.addEventListener('load', initPage, false);
+        let notificationsEnabled = false;
+        function initPage() {
+          pirateManager.registerServiceWorker();
+          feedParrot();
+          makeParrotHungry();
+          let notificationsBtn = document.getElementById('enable-notifications');
+          if (!('Notification' in window)) {
+            notificationsBtn.disabled = true;
+            notificationsBtn.innerHTML = '<h3>This browser does not support notifications!</h3>';
+          } else if (Notification.permission === 'denied') {
+            notificationsBtn.disabled = true;
+            notificationsBtn.innerHTML = '<h3>Arrgh, you turned off notifications!</h3>';
+          } else if (Notification.permission === 'granted') {
+            notificationsEnabled = true;
+            notificationsBtn.disabled = 'none';
+            notificationsBtn.innerHTML = '<h3>Notifications enabled</h3>';
+            pirateManager.subscribeToPush();
+          }
+
+          notificationsBtn.addEventListener('click', () => {
+            enableNotifications(notificationsBtn);
+
+
+          });
+
+          document.getElementById('feed-parrot').addEventListener('click', feedParrot);
+        }
+
+        function enableNotifications(notificationsBtn) {
+          if (Notification.permission === 'denied') {
+            alert('Enable notifications in your browser!');
+            return;
+          }
+          if (notificationsEnabled) {
+            alert('Notifications are already enabled!');
+            return;
+          } else {
+            notificationsEnabled = true;
+          }
+          Notification.requestPermission().then((result) => {
+            pirateManager.subscribeToPush();
+            notificationsBtn.innerHTML = '<h3>You will get notifications to feed Peggy!</h3>';
+          })
+            .catch(() => {
+                notificationsBtn.innerHTML = '<h3>Arrgh, you turned off notifications!</h3>';
+            });
+        }
+
+        function makeParrotHungry() {
+          let parrotPic = document.getElementById('parrot');
+          let interval = setInterval(() => {
+            parrotPic.style.opacity -= .1;
+            if (parrotPic.style.opacity <= 0) {
+              clearInterval(interval);
+              hideParrot();
+            }
+          }, 1000 * 3);
+        }
+
+        function feedParrot() {
+          let parrotPic = document.getElementById('parrot');
+          parrotPic.style.opacity = 1.0;
+          fetch('http://localhost:8081/feed', {
+            method: 'post'
+          }).then(() => {
+            console.log('fed and posted');
+          });
+        }
+
+        function hideParrot() {
+          document.getElementById('peggy-intro').innerHTML = 'Arrgh, Peggy sleeps with the fishes...';
+          document.getElementById('feed-reminder-text').innerHTML = 'Now it\'s your turn!';
+          document.getElementById('enable-notifications').style.display = 'none';
+          document.getElementById('feed-parrot').style.display = 'none';
+          document.getElementById('parrot').style.display = 'none';
+          document.getElementById('parrot-plank').style.display = 'block';
+        }
+
+      })();
+
+    </script>
+</body>
+</html>

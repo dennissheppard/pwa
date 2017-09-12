@@ -1,0 +1,40 @@
+{
+  "name": "iPatch",
+  "short_name": "iPatch",
+  "start_url": "index.html",
+  "display": "standalone",
+  "theme_color": "#000",
+  "background_color": "#000",
+  "description": "The best pirate app on the high seas! Arrrgh!",
+  "icons": [{
+    "src": "images/app-icon48.png",
+    "sizes": "48x48",
+    "type": "image/png"
+  }, {
+    "src": "images/app-icon72.png",
+    "sizes": "72x72",
+    "type": "image/png"
+  }, {
+    "src": "images/app-icon96.png",
+    "sizes": "96x96",
+    "type": "image/png"
+  }, {
+    "src": "images/app-icon144.png",
+    "sizes": "144x144",
+    "type": "image/png"
+  }, {
+    "src": "images/app-icon168.png",
+    "sizes": "168x168",
+    "type": "image/png"
+  }, {
+    "src": "images/app-icon192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }],
+  "prefer_related_applications": false,
+  "related_applications": [{
+    "platform": "play",
+    "url": "com.arrgh.pirates"
+  }],
+  "orientation": "portrait"
+}
