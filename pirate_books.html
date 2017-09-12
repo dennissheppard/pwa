@@ -54,24 +54,33 @@
     <script defer src="libs/scripts/material.min.js"></script>
 
     <script>
-      let pirateBooks = [];
-      let bookSearchUrl = 'https://openlibrary.org/search.json?q=pirate';
-      fetch(bookSearchUrl).then((response) => response.json()).then((data) => {
-        pirateBooks = data.docs;
-        generatePirateBookList();
-      });
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js').then((registration) => {
 
-      function generatePirateBookList() {
-        let pirateList = document.getElementById('pirateList');
-        for (let i = 0, book; book = pirateBooks[i]; ++i) {
-          book.author_name = book.author_name ? book.author_name[0] : '';
-          appendBooks(book);
+            }, function (err) {
+                console.log(err);
+            });
+
+        } else {
+            alert('No service worker support in this browser');
         }
-      }
+        let pirateBooks = [];
+        let bookSearchUrl = 'https://openlibrary.org/search.json?q=pirate';
+        fetch(bookSearchUrl).then((response) => response.json()).then((data) => {
+            pirateBooks = data.docs;
+            generatePirateBookList();
+        });
 
-      function appendBooks(book) {
-        let bookList = document.getElementById('book-list');
-        const bookCardHTML =
+        function generatePirateBookList() {
+            for (let i = 0, book; book = pirateBooks[i]; ++i) {
+                book.author_name = book.author_name ? book.author_name[0] : '';
+                appendBooks(book);
+            }
+        }
+
+        function appendBooks(book) {
+            let bookList = document.getElementById('book-list');
+            const bookCardHTML =
 `
 <div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
   <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
