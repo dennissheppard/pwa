@@ -1,6 +1,6 @@
 {
-  "name": "PWA Pirates",
-  "version": "1.0",
+  "name": "PWA_Pirates",
+  "version": "1.0.0",
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.4",

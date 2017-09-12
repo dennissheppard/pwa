@@ -30,6 +30,10 @@
     "src": "images/app-icon192.png",
     "sizes": "192x192",
     "type": "image/png"
+  }, {
+    "src": "images/app-icon512.png",
+    "sizes": "512x512",
+    "type": "image/png"
   }],
   "prefer_related_applications": false,
   "related_applications": [{
