@@ -54,6 +54,16 @@
     <script defer src="libs/scripts/material.min.js"></script>
 
     <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js').then((registration) => {
+
+        }, function(err) {
+            console.log(err);
+          });
+
+      } else {
+        alert('No service worker support in this browser');
+      }
       let pirateBooks = [];
       let bookSearchUrl = 'https://openlibrary.org/search.json?q=pirate';
       fetch(bookSearchUrl).then((response) => response.json()).then((data) => {
