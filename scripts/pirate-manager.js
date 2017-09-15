@@ -48,7 +48,7 @@ var pirateManager = (() => {
           });
 
       } else {
-        alert('No service worker support in this browser');
+        console.log('No service worker support in this browser');
       }
     }
 
