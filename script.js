@@ -1,7 +1,7 @@
 (() => {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-    navigator.serviceWorker.register('scripts/trivia/service-worker.js', {scope: 'scripts'}).then((registration) => {
+    navigator.serviceWorker.register('service-worker.js').then((registration) => {
       console.log('registered');
       console.log(registration);
     }, (err) => {
