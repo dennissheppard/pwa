@@ -2,8 +2,9 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
     navigator.serviceWorker.register('service-worker.js').then((registration) => {
+      console.log('registered');
       console.log(registration);
-    }, function(err) {
+    }, (err) => {
         console.log(err);
       });
     });
