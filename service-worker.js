@@ -16,26 +16,19 @@ self.addEventListener('install', (event) => {
 
 
 self.addEventListener('fetch', (event) => {
-  if(!navigator.onLine && event.request.url.indexOf('index.html') !== -1) {
-    event.respondWith(showOfflineLanding(event));
-  }
-  else {
-    event.respondWith(pullFromCache(event));
-  }
+  const version = 'version1';
 
+  event.respondWith(
+   caches.open(version).then(cache => {
+      return cache.match(event.request).then((response) => {
+        let fetchPromise = fetch(event.request).then(networkResponse => {
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
+        });
+        event.waitUntil(fetchPromise);
+        return response;
+      })
+    })
+  );
 });
 
-function showOfflineLanding(event) {
-  return caches.match(new Request('offline.html'));
-}
-
-function pullFromCache(event) {
-  return caches.match(event.request).then((response) => {
-    return response || fetch(event.request).then((response) => {
-        return caches.open('version1').then((cache) => {
-          cache.put(event.request, response.clone());
-          return response;
-        });
-      });
-  });
-}
