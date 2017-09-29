@@ -5,9 +5,8 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('sync', (event) => {
-  if (event.tag == 'post-message') {
-    event.waitUntil(pirateManager.postComment());
-  }
+  const data = pirateManager.setupCommentData(event.tag);
+  event.waitUntil(pirateManager.postComment(data));
 });
 
 toolbox.router.get('/images/*', toolbox.fastest, {
