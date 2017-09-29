@@ -16,19 +16,14 @@ self.addEventListener('install', (event) => {
 
 
 self.addEventListener('fetch', (event) => {
-  const version = 'version1';
-
-  event.respondWith(
-   caches.open(version).then(cache => {
-      return cache.match(event.request).then((response) => {
-        let fetchPromise = fetch(event.request).then(networkResponse => {
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
+    const version = 'version1';
+    const placeholderAssetURL = 'placeholder';
+    event.respondWith(
+      fetch(event.request).catch((e) => { // fetch fails
+        return caches.open(version).then((cache) => {
+          return cache.match(placeholderAssetURL);
         });
-        event.waitUntil(fetchPromise);
-        return response;
       })
-    })
-  );
+    );
 });
 
