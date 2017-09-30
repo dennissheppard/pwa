@@ -17,7 +17,7 @@
         });
       });
     } else {
-      alert('No service worker support in this browser');
+      console.log('No service worker support in this browser');
     }
   }
 
@@ -29,30 +29,47 @@
 
   function postComment() {
     document.getElementById('commentBtn').innerHTML = "Posting...";
-    localforage.setItem('comment', document.getElementById('comment-text').value);
-    navigator.serviceWorker.ready.then((sw) => {
-      return sw.sync.register('post-comment')
-        .then((args) => {
-          timeout = setTimeout(() => {
-            localforage.getItem('comment').then((val) => {
-              if(val) {
-                document.getElementById('no-connection-message').style.display = "block";
-                document.getElementById('commentBtn').innerHTML = "Leave a comment";
-                document.getElementById('comment-text').value = "";
-              } else {
-                clearTimeout(timeout);
-              }
+    localforage.setItem('comment',
+        document.getElementById('comment-text').value)
+            .then(() => submitPost());
+  }
+
+  function submitPost() {
+    if (navigator.serviceWorker) {
+        navigator.serviceWorker.ready.then((sw) => {
+          return sw.sync.register('post-comment')
+            .then((args) => {
+              timeout = setTimeout(() => {
+                localforage.getItem('comment').then((val) => {
+                  if(val) {
+                    document.getElementById('no-connection-message').style.display = "block";
+                    document.getElementById('commentBtn').innerHTML = "Leave a comment";
+                    document.getElementById('comment-text').value = "";
+                  } else {
+                    clearTimeout(timeout);
+                  }
+                });
+              }, 3000);
+            })
+            .catch((err) => {
+              console.log(err);
             });
-          }, 3000);
-        })
-        .catch((err) => {
-          console.log(err);
         });
-    });
+    } else {
+        pirateManager.postComment().then((data) => {
+            document.getElementById('comment-text').value = "";
+            document.getElementById('commentBtn').innerHTML = "Leave a comment";
+            document.getElementById('no-connection-message').style.display = "none";
+            appendComment(document.getElementById('comments'), data);
+        });
+    }
   }
 
   function addListeners() {
     document.getElementById('commentBtn').addEventListener('click', () => postComment());
+    if (!navigator.serviceWorker) {
+        return;
+    }
     navigator.serviceWorker.addEventListener('message', (event) => {
       clearTimeout(timeout);
       document.getElementById('comment-text').value = "";

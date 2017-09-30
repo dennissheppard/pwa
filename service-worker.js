@@ -55,7 +55,7 @@ toolbox.router.get('/*', toolbox.networkFirst, {
 });
 
 function notifyClient(msg){
-  self.clients.matchAll().then((clients) => {
+  self.clients.matchAll({'includeUncontrolled': true}).then((clients) => {
     clients[0].postMessage(msg);
   });
 }
